@@ -87,7 +87,7 @@ form {
 }
 
 form input:not(#type),
-form button {
+form .button {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -98,13 +98,14 @@ form button {
   font-size: 1rem;
 }
 
-form button {
+form .button {
   background-color: var(--main-color);
   color: #fff;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 form label {
@@ -236,4 +237,24 @@ ul li:hover .action {
 
 #auth-msg {
   color: #000;
+}
+
+.view {
+  text-align: center;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  height: 42px;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.5rem;
+  text-decoration: none;
+  background-color: var(--main-color);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }

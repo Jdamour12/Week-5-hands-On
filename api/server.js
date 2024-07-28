@@ -9,34 +9,36 @@ app.use(express.json())
 app.use(cors())
 dotenv.config();
 
-// connection to the database
+// Creating connection to the database
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD
 })
 
-// check if connection works
+// Checking if connection succeeded
 db.connect((err) => {
-    // if connection does not work
-    if(err) return console.log("Error conneceting to MySQL")
+    // if connection doesn't succeed
+    if(err) return console.log("Error connecting to MySQL")
 
-    // if connection works successfully
+    // if connection succeeded
     console.log("Connected to MySQL as id: ", db.threadId)
 
     //create a database
     db.query(`CREATE DATABASE IF NOT EXISTS expense_tracker`, (err, result) => {
-        if(err) return console.log(err) // error while creating database
+        // If creating database doesn't succeeded
+        if(err) return console.log(err) 
 
-        console.log("database expense_tracker created/checked");// db created successfully
-
-        //change our database
+        // If database creation succeeded
+        console.log("database expense_tracker created/checked");
+        //Using our created database
         db.changeUser({ database: 'expense_tracker' }, (err, result) => {
-            if(err) return console.log(err) // if error changing the database
+             // if changing the database doesn't succeeds
+            if(err) return console.log(err)
+            // If database changing succeeds
+            console.log("expense_tracker is in use"); 
 
-            console.log("expense_tracker is in use"); // successfully use of database
-
-            //create users table
+            //create Users table
             const usersTable = `
                 CREATE TABLE IF NOT EXISTS users (
                     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -47,9 +49,31 @@ db.connect((err) => {
             `;
 
             db.query(usersTable, (err, result) => {
-                if(err) return console.log(err) // if error creating table
+                // if creating table fails
+                if(err) return console.log(err) 
 
-                console.log("users table created/checked") //user table created successfully
+                //If creating users table succeeds
+                console.log("users table created/checked") 
+            })
+
+            //create Expense table
+            const expenseTable = `
+                CREATE TABLE IF NOT EXISTS Expense (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    category VARCHAR(255),
+                    amount DECIMAL(10, 2),
+                    date DATE,
+                    user_id INT,
+                    FOREIGN KEY (user_id) REFERENCES Users(id)
+                )
+            `;
+
+            db.query(expenseTable, (err, result) => {
+                // if creating table fails
+                if(err) return console.log(err) 
+
+                //If creating Expense table succeeds
+                console.log("Expense table created/checked") 
             })
         })
     })
@@ -101,7 +125,7 @@ app.post('/api/login', async(req, res) => {
             if(!isPasswordValid) return res.status(400).json("Invalid Email or Password")
 
             //passwords match we accept
-            return res.status(200).json("Login sucessful")
+            return res.status(200).json("Login successful")
         })
     } 
     catch(err) {
@@ -109,7 +133,39 @@ app.post('/api/login', async(req, res) => {
     }
 })
 
+//Expense adding route
+app.post('/api/index', async(req, res) => {
+    try{
+            // query to create/add expense
+            const newExpense = `INSERT INTO Expense(category, amount, date) VALUES (?)`
+            value = [ req.body.category, req.body.amount, req.body.date ]
+
+            db.query(newExpense, [value], (err, data) => {
+                if(err) return res.status(400).json("Something went wrong")
+
+                return res.status(201).json("Expense added successfully")
+            })
+    }
+    catch(err) {
+        res.status(500).json("Internal Server Error")
+    }
+})
+
+// Codes for selecting data from our database
+app.get('/api/view', (req, res) => {
+    const userId = req.query.userId; 
+    if (!userId) {
+        return res.status(400).json("User ID is required");
+    }
+
+    const query = 'SELECT category, amount, date FROM Expense WHERE id = ?';
+    db.query(query, [userId], (err, results) => {
+        if (err) return res.status(500).json("Database query error: ", err);
+        res.json(results);
+    });
+});
+
 // starts our server
-app.listen(3000, () => {
-    console.log('server is running on PORT 3000...')   
+app.listen(5500, () => {
+    console.log('server is running on PORT 5500...')   
 })

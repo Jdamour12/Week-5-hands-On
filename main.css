@@ -194,5 +194,6 @@ input[type=submit] {
 }
 
 #auth-msg {
-    color: #000;
+    color: green;
+
 }

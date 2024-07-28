@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const authMsg = document.getElementById('auth-msg');
 
         try{
-            const response = await fetch('http://localhost:3000/api/register', {
+            const response = await fetch('http://localhost:5500/api/register', {
                 method: 'POST',
                 headers:  {
                     'Content-Type': 'application/json'
@@ -31,3 +31,4 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
 })
+

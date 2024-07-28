@@ -14,11 +14,11 @@
       <header>
         <div>
           <h5>Total Balance</h5>
-          <span id="balance">$0.00</span>
+          <span id="balance">$600000.00</span>
         </div>
         <div>
           <h5>Income</h5>
-          <span id="income">$0.00</span>
+          <span id="income">$600000.00</span>
         </div>
         <div>
           <h5>Expense</h5>
@@ -47,7 +47,7 @@
           </div>
           <div>
             <label for="name">Name</label>
-            <input type="text" name="name" required />
+            <input type="text" name="name" id="expense-name" required class="validate" autocomplete="off" />
           </div>
           <div>
             <label for="amount">Amount</label>
@@ -57,18 +57,24 @@
               value="0"
               min="0.01"
               step="0.01"
+              id="expense-amount"
+              class="validate" 
+              autocomplete="off"
               required
             />
           </div>
           <div>
             <label for="date">Date</label>
-            <input type="date" name="date" required />
+            <input type="date" name="date" id="expense-date" required class="validate" autocomplete="off" />
           </div>
-          <button type="submit">Submit</button>
+          <p id="auth-msg" style="color: rgb(5, 251, 5)"></p>
+          <input type="submit" value="Submit" class="button"/>
+          <a href="view.html" class="view">View Expenses</a>
         </form>
       </section>
     </main>
 
-    <script src="script.js"></script>
+    <!-- script files -->
+    <script src="./index.js"></script>
   </body>
 </html>
